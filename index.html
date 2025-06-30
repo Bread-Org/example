@@ -1,15 +1,288 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-  <script
-    defer
-    src="https://bread-org.github.io/s16.games/embed.js"
-    data-api="https://bread-org.github.io/s16.games"
-    data-api2="https://bread-org.github.io/s16.chunk2"
-    data-target="#gameContainer"
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dih games (s16) </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+
+        :root {
+            /* ts the main theme*/
+            --bg-primary: #f3f4f6;
+            --bg-secondary: #ffffff;
+            --text-primary: #374151;
+            --text-secondary: #6b7280;
+            --sidebar-bg: #f9fafb;
+            --sidebar-border: #e5e7eb;
+            --card-outline: #e0e7ff;
+            --accent-blue: #3b82f6;
+            --accent-blue-hover: #2563eb;
+            --red-button: #ef4444;
+            --red-button-hover: #dc2626;
+            --gray-bg-hover: #e5e7eb;
+            --input-bg: #ffffff;
+            --input-border: #e2e8f0;
+            --active-link-bg: #e0e7ff;
+            --active-link-text: #3b82f6;
+            --active-link-outline: #93c5fd;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            min-height: 100vh;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar {
+            background-color: var(--sidebar-bg);
+            border-right-color: var(--sidebar-border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .sidebar-link {
+            color: var(--text-secondary);
+        }
+        .sidebar-link:hover {
+            background-color: var(--gray-bg-hover);
+        }
+        .sidebar-link.active {
+            background-color: var(--active-link-bg);
+            color: var(--active-link-text);
+            outline-color: var(--active-link-outline);
+        }
+
+        .main-header h1 { color: var(--text-primary); }
+        .main-header p { color: var(--text-secondary); }
+
+        input, select {
+            background-color: var(--input-bg);
+            border-color: var(--input-border);
+            color: var(--text-primary);
+        }
+        input:focus, select:focus {
+            box-shadow: 0 0 0 2px var(--accent-blue);
+        }
+
+        button.bg-blue-600 {
+            background-color: var(--accent-blue);
+        }
+        button.bg-blue-600:hover {
+            background-color: var(--accent-blue-hover);
+        }
+        button.bg-red-600 {
+            background-color: var(--red-button);
+        }
+        button.bg-red-600:hover {
+            background-color: var(--red-button-hover);
+        }
+
+        .game-card {
+            background-color: var(--bg-secondary);
+            outline-color: var(--card-outline);
+            color: var(--text-primary);
+        }
+
+        #gameHistorySection, #messageModal > div, #settingsSection {
+            background-color: var(--bg-secondary);
+            outline-color: var(--sidebar-border); 
+            color: var(--text-primary);
+        }
+        #gameHistoryContainer .flex {
+            background-color: var(--bg-primary);
+            outline-color: var(--sidebar-border);
+            color: var(--text-secondary);
+        }
+        #gameHistoryContainer .flex:hover {
+            background-color: var(--gray-bg-hover);
+        }
+        #gameHistorySection h2, #settingsSection h2 { color: var(--text-primary); }
+        #noHistoryMessage { color: var(--text-secondary); }
+
+        #gamePageContainer { background-color: var(--bg-primary); }
+        #gamePageTitle { color: var(--text-primary); }
+        #gamePageFrame { outline-color: var(--sidebar-border); }
+
+        .pagination-btn {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--sidebar-border);
+        }
+        .pagination-btn:hover {
+            background-color: var(--gray-bg-hover);
+        }
+        .pagination-btn.active {
+            background-color: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+
+        /* cusyom scrollbar cuz why not */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px; 
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--text-secondary);
+            border-radius: 10px;
+            border: 2px solid var(--bg-primary);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: var(--accent-blue);
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+    <div class="flex w-full h-screen">
+        <!-- the sidebar thing -->
+        <nav class="sidebar w-20 flex-shrink-0 flex flex-col items-center py-6 border-r rounded-r-xl transition-colors duration-300">
+            <div class="mb-8">
+                <i data-lucide="gamepad-2" class="w-10 h-10 text-blue-600"></i>
+            </div>
+            <ul class="space-y-6 flex-grow">
+                <li>
+                    <button id="navHomeBtn" class="sidebar-link p-3 rounded-xl hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300 outline outline-2 outline-offset-2 outline-transparent flex items-center justify-center active" title="Games">
+                        <i data-lucide="home" class="w-6 h-6"></i>
+                    </button>
+                </li>
+                <li>
+                    <button id="navHistoryBtn" class="sidebar-link p-3 rounded-xl hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300 outline outline-2 outline-offset-2 outline-transparent flex items-center justify-center" title="History">
+                        <i data-lucide="history" class="w-6 h-6"></i>
+                    </button>
+                </li>
+            </ul>
+            <div class="mt-auto space-y-6">
+                <li>
+                    <button id="navSettingsBtn" class="sidebar-link p-3 rounded-xl hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300 outline outline-2 outline-offset-2 outline-transparent flex items-center justify-center" title="Settings">
+                        <i data-lucide="settings" class="w-6 h-6"></i>
+                    </button>
+                </li>
+            </div>
+        </nav>
+
+        <!-- main area -->
+        <div class="flex-1 flex flex-col p-6 overflow-y-auto">
+            <header class="main-header mb-6">
+                <h1 class="text-4xl font-bold">s16.games</h1>
+                <p class="mt-1">Discover our full library of games.</p>
+            </header>
+
+            <!-- searchbar-->
+            <section id="searchSortSection" class="mb-6">
+                <div class="relative w-full mb-4">
+                    <input
+                        type="text"
+                        id="searchBar"
+                        placeholder="Search games..."
+                        class="w-full p-2 pl-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all duration-200 outline outline-2 outline-offset-2 outline-blue-200"
+                    >
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i data-lucide="search" class="w-5 h-5 text-gray-500"></i>
+                    </div>
+                </div>
+                <!-- sort games  -->
+                <div class="flex items-center justify-center gap-2 mb-4">
+                    <label for="sortOrder" class="font-medium">Sort by Name:</label>
+                    <select id="sortOrder" class="p-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-300 outline outline-2 outline-offset-2 outline-gray-200">
+                        <option value="az">A-Z</option>
+                        <option value="za">Z-A</option>
+                    </select>
+                    <button
+                        id="applySortBtn"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300 outline outline-2 outline-offset-2 outline-blue-300 flex items-center space-x-2"
+                    >
+                        <i data-lucide="arrow-down-up" class="w-5 h-5"></i>
+                        <span>Apply Sort</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- shitty game history -->
+            <section id="gameHistorySection" class="hidden p-6 rounded-xl shadow-md mb-6 outline outline-2 outline-offset-2 outline-gray-200">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-semibold">Recently Played Games</h2>
+                    <button
+                        id="clearHistoryBtn"
+                        class="px-4 py-2 bg-red-600 text-white rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-300 outline outline-2 outline-offset-2 outline-red-300 flex items-center space-x-2"
+                    >
+                        <i data-lucide="trash-2" class="w-5 h-5"></i>
+                        <span>Clear History</span>
+                    </button>
+                </div>
+                <div id="gameHistoryContainer" class="max-h-64 overflow-y-auto pr-2">
+                    <p class="text-center" id="noHistoryMessage">No games played yet.</p>
+                </div>
+            </section>
+
+            <!-- themes -->
+            <section id="settingsSection" class="hidden p-6 rounded-xl shadow-md mb-6 outline outline-2 outline-offset-2 outline-gray-200">
+                <h2 class="text-2xl font-semibold mb-4">Settings</h2>
+                <div class="flex items-center gap-4 mb-4">
+                    <label for="themeSelect" class="font-medium">Select Theme:</label>
+                    <select id="themeSelect" class="p-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-300 outline outline-2 outline-offset-2 outline-gray-200">
+                        <option value="light">☀️ Light</option>
+                        <option value="dark">🌙 Dark</option>
+                        <option value="ocean">🌊 Ocean</option>
+                        <option value="sunset">🌅 Sunset</option>
+                        <option value="hacker">💻 Hacker</option>
+                    </select>
+                </div>
+            </section>
+
+            <section id="gameContainer" class="flex flex-wrap justify-center gap-4 p-4"></section>
+
+            <!-- the thingy to change pages -->
+            <div id="paginationControls" class="flex justify-center items-center gap-2 mt-6">
+                <button id="prevPageBtn" class="pagination-btn px-4 py-2 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">Previous</button>
+                <span id="pageNumbers" class="flex gap-1">
+                </span>
+                <button id="nextPageBtn" class="pagination-btn px-4 py-2 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- game container -->
+    <div id="gamePageContainer" class="hidden fixed inset-0 z-[999] flex flex-col items-center justify-start p-5 md:p-10 box-border">
+        <div class="flex justify-between items-center w-full max-w-5xl mb-4">
+            <button onclick="closegame()" class="p-3 bg-blue-600 text-white rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300 outline outline-2 outline-offset-2 outline-blue-300 flex items-center space-x-2">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                <span>Back to Games</span>
+            </button>
+            <button id="fullscreenBtn" class="p-3 bg-blue-600 text-white rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300 outline outline-2 outline-offset-2 outline-blue-300 flex items-center space-x-2" title="Fullscreen">
+                <i data-lucide="maximize" class="w-5 h-5"></i>
+                <span>Fullscreen</span>
+            </button>
+        </div>
+        <h2 id="gamePageTitle" class="text-3xl font-bold mt-4 mb-4 text-center"></h2>
+        <iframe id="gamePageFrame" class="w-full flex-grow border-none rounded-xl shadow-lg outline outline-2 outline-offset-2 outline-gray-200" allowfullscreen></iframe>
+    </div>
+
+    <div id="messageModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-[1000]">
+        <div class="p-6 rounded-xl shadow-xl max-w-sm w-full text-center outline outline-2 outline-offset-2 outline-gray-200">
+            <p id="messageModalText" class="text-lg font-medium mb-4"></p>
+            <button onclick="hideMessage()" class="px-6 py-2 bg-blue-600 text-white rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300 outline outline-2 outline-offset-2 outline-blue-300">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <!-- so if youre a dev or a skid seeing how this works, dont delete ts this the main logic -->
+    <script
+        defer
+        src="./embed.js"
+        data-api="https://bread-org.github.io/s16.games"
+        data-api2="https://bread-org.github.io/s16.chunk2"
+        data-target="#gameContainer"
     ></script>
-  </head>
-  <body>
-    <section id="gameContainer"></section>
-  </body>
+</body>
 </html>
