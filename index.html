@@ -156,10 +156,6 @@
                     </button>
                 </li>
                 <li>
-                    <button id="navHistoryBtn" class="sidebar-link p-3 rounded-xl hover:bg-gray-200 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300 outline outline-2 outline-offset-2 outline-transparent flex items-center justify-center" title="History">
-                        <i data-lucide="history" class="w-6 h-6"></i>
-                    </button>
-                </li>
             </ul>
             <div class="mt-auto space-y-6">
                 <li>
@@ -206,35 +202,17 @@
                     </button>
                 </div>
             </section>
-
-            <!-- shitty game history -->
-            <section id="gameHistorySection" class="hidden p-6 rounded-xl shadow-md mb-6 outline outline-2 outline-offset-2 outline-gray-200">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-semibold">Recently Played Games</h2>
-                    <button
-                        id="clearHistoryBtn"
-                        class="px-4 py-2 bg-red-600 text-white rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-300 outline outline-2 outline-offset-2 outline-red-300 flex items-center space-x-2"
-                    >
-                        <i data-lucide="trash-2" class="w-5 h-5"></i>
-                        <span>Clear History</span>
-                    </button>
-                </div>
-                <div id="gameHistoryContainer" class="max-h-64 overflow-y-auto pr-2">
-                    <p class="text-center" id="noHistoryMessage">No games played yet.</p>
-                </div>
-            </section>
-
             <!-- themes -->
             <section id="settingsSection" class="hidden p-6 rounded-xl shadow-md mb-6 outline outline-2 outline-offset-2 outline-gray-200">
                 <h2 class="text-2xl font-semibold mb-4">Settings</h2>
                 <div class="flex items-center gap-4 mb-4">
                     <label for="themeSelect" class="font-medium">Select Theme:</label>
                     <select id="themeSelect" class="p-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-300 outline outline-2 outline-offset-2 outline-gray-200">
-                        <option value="light">☀️ Light</option>
-                        <option value="dark">🌙 Dark</option>
-                        <option value="ocean">🌊 Ocean</option>
-                        <option value="sunset">🌅 Sunset</option>
-                        <option value="hacker">💻 Hacker</option>
+                        <option value="light"> Light</option>
+                        <option value="dark"> Dark</option>
+                        <option value="ocean">Ocean</option>
+                        <option value="sunset">Sunset</option>
+                        <option value="hacker">Hacker</option>
                     </select>
                 </div>
             </section>
