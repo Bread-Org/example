@@ -259,54 +259,7 @@
     }
 
 
-    function saveGameToHistory(game) { 
-        let history = JSON.parse(localStorage.getItem('gameHistory')) || [];
-        history = history.filter(item => item.alt !== game.alt);
-        history.unshift(game); // Add to the beginning
-        // 10 games limit 
-        history = history.slice(0, 10);
-        localStorage.setItem('gameHistory', JSON.stringify(history));
-        displayGameHistory();
-    }
 
-
-    function displayGameHistory() {
-        const historyContainer = document.getElementById('gameHistoryContainer');
-        const noHistoryMessage = document.getElementById('noHistoryMessage');
-
-
-        if (!historyContainer || !noHistoryMessage) {
-            console.warn("History container or no history message element not found, skipping history display.");
-            return;
-        }
-
-        const history = JSON.parse(localStorage.getItem('gameHistory')) || [];
-
-        if (history.length === 0) {
-            noHistoryMessage.classList.remove('hidden');
-            historyContainer.innerHTML = ''; // delete the mf history
-        } else {
-            noHistoryMessage.classList.add('hidden');
-            historyContainer.innerHTML = history.map(game => `
-                <div
-                    onclick="opengame('${game.apiUrl}', '${game.alt}', '${game.title}')"
-                    class="flex items-center justify-between p-3 mb-2 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors duration-200 outline outline-1 outline-offset-1 outline-gray-200"
-                >
-                    <span class="font-medium">${game.title}</span>
-                    <i data-lucide="play" class="w-5 h-5 text-blue-500"></i>
-                </div>
-            `).join('');
-        }
-
-        lucide.createIcons(); //naw 
-    }
-
-
-    function clearGameHistory() {
-        localStorage.removeItem('gameHistory');
-        displayGameHistory();
-        showMessage('Game history cleared!');
-    }
 
     // themes
 
@@ -352,7 +305,7 @@
     //sidebar logic
 
     function showSection(sectionId) { 
-        const sections = ['gameContainer', 'gameHistorySection', 'settingsSection'];
+        const sections = ['gameContainer', 'settingsSection'];
         const searchSortSection = document.getElementById('searchSortSection');
         const paginationControls = document.getElementById('paginationControls');
 
@@ -391,8 +344,6 @@
         });
         if (sectionId === 'gameContainer') {
             document.getElementById('navHomeBtn').classList.add('active');
-        } else if (sectionId === 'gameHistorySection') {
-            document.getElementById('navHistoryBtn').classList.add('active');
         } else if (sectionId === 'settingsSection') {
             document.getElementById('navSettingsBtn').classList.add('active');
         }
@@ -415,7 +366,6 @@
     // Sidebar
 
     document.getElementById('navHomeBtn').addEventListener('click', () => showSection('gameContainer'));
-    document.getElementById('navHistoryBtn').addEventListener('click', () => { showSection('gameHistorySection'); displayGameHistory(); });
     document.getElementById('navSettingsBtn').addEventListener('click', () => showSection('settingsSection'));
 
 
@@ -461,9 +411,6 @@
                 opengame(gameToOpen.apiUrl, gameToOpen.alt, gameToOpen.title);
             } else {
                 showMessage('Game not found.');
-                if (window.location.protocol !== 'blob:') {
-                    history.replaceState({}, document.title, window.location.pathname);
-                }
             }
         }
 
@@ -490,12 +437,9 @@
 
 
         if (window.location.protocol !== 'blob:') {
-            const newUrl = `${window.location.pathname}?id=${alt}`;
-            history.pushState({ gameAlt: alt }, title, newUrl);
-        }
+            const newUrl = `${window.location.pathname}?id=${alt}`;        }
 
 
-        saveGameToHistory({ apiUrl, alt, title });
     };
 
 
@@ -508,9 +452,7 @@
         gamePageContainer.classList.remove("flex"); 
         document.body.style.overflow = ''; 
 
-        if (window.location.protocol !== 'blob:') {
-            history.replaceState({}, document.title, window.location.pathname);
-        }
+
     };
 
 
