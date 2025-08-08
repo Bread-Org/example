@@ -375,39 +375,53 @@
     target.innerHTML = "<p class='text-center font-medium'>Loading games...</p>";
     showSection('gameContainer');
 
-try {
-    const response = await fetch(`${api}/fullg.json`);
-    const games = await response.json();
+    try {
 
-    // If the games don't have an apiUrl property, add a dummy one or just skip it
-    allGames = games.map(game => ({
-        ...game,
-        apiUrl: 'https://bread-org.github.io/s16' // or empty string if you want
-    }));
+        const [response1, response2] = await Promise.all([
+            fetch(`${api}/g.json`),
+            fetch(`${api2}/g.json`)
+        ]);
 
-    filterGames();
 
-    const searchBar = document.getElementById('searchBar');
-    searchBar.placeholder = `Search between ${allGames.length} games...`;
+        const [games1, games2] = await Promise.all([
+            response1.json(),
+            response2.json()
+        ]);
 
-    const params = new URLSearchParams(window.location.search);
-    const gameId = params.get('id');
-    if (gameId) {
-        const gameToOpen = allGames.find(game => game.alt === gameId);
-        if (gameToOpen) {
-            opengame(gameToOpen.apiUrl, gameToOpen.alt, gameToOpen.title);
-        } else {
-            showMessage('Game not found.');
+
+        allGames = [
+            ...games1.map(game => ({ ...game, apiUrl: api })),
+            ...games2.map(game => ({ ...game, apiUrl: api2 }))
+        ];
+        filterGames(); 
+
+
+    
+
+
+        const searchBar = document.getElementById('searchBar');
+        searchBar.placeholder = `Search between ${allGames.length} games...`;
+
+
+        const params = new URLSearchParams(window.location.search);
+        const gameId = params.get('id');
+        if (gameId) {
+            const gameToOpen = allGames.find(game => game.alt === gameId);
+            if (gameToOpen) {
+                opengame(gameToOpen.apiUrl, gameToOpen.alt, gameToOpen.title);
+            } else {
+                showMessage('Game not found.');
+            }
         }
+
+
+        lucide.createIcons();
+
+    } catch (err) {
+        target.innerHTML = "<p class='text-red-500 text-center font-medium'>Error loading games. Please try again later.</p>";
+        console.error("Error loading games:", err);
+        showMessage('Error loading games. Please try again later.');
     }
-
-    lucide.createIcons();
-
-} catch (err) {
-    target.innerHTML = "<p class='text-red-500 text-center font-medium'>Error loading games. Please try again later.</p>";
-    console.error("Error loading games:", err);
-    showMessage('Error loading games. Please try again later.');
-}
 
 
     window.opengame = (apiUrl, alt, title) => {
