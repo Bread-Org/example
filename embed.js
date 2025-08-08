@@ -402,7 +402,6 @@
     // Events
 
     document.getElementById('themeSelect').addEventListener('change', (event) => setTheme(event.target.value));
-    document.getElementById('clearHistoryBtn').addEventListener('click', clearGameHistory);
     document.getElementById('searchBar').addEventListener('keyup', filterGames);
     document.getElementById('applySortBtn').addEventListener('click', filterGames);
     document.getElementById('fullscreenBtn').addEventListener('click', toggleFullscreen);
